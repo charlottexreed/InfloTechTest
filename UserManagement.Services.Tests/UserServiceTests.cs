@@ -20,17 +20,35 @@ public class UserServiceTests
         result.Should().BeSameAs(users);
     }
 
-    private IQueryable<User> SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
+    [Fact]
+    public void FilterByActive_ReturnsOnlyActiveUsers()
+    {
+        var service = CreateService();
+        var users = SetupUsers();
+        
+        var result = service.FilterByActive(true);
+
+        result.Should().HaveCount(2).And.OnlyContain(u => u.IsActive);
+    }
+
+    [Fact]
+    public void FilterByActive_ReturnsOnlyInactiveUsers()
+    {
+        var service = CreateService();
+        var users = SetupUsers();
+        
+        var result = service.FilterByActive(false);
+
+        result.Should().HaveCount(1).And.OnlyContain(u => !u.IsActive);
+    }
+
+    private IQueryable<User> SetupUsers()
     {
         var users = new[]
         {
-            new User
-            {
-                Forename = forename,
-                Surname = surname,
-                Email = email,
-                IsActive = isActive
-            }
+            new User { Forename = "Johnny", Surname = "User", Email = "juser@example.com", IsActive = true },
+            new User { Forename = "Timmy", Surname = "Smith", Email = "tsmith@example.com", IsActive = true },
+            new User { Forename = "Sarah", Surname = "Lopez", Email = "slopez@example.com", IsActive = false }
         }.AsQueryable();
 
         _dataContext
