@@ -49,6 +49,10 @@ public class UsersController : Controller
     [HttpPost("add")]
     public IActionResult Add(User user)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(user);
+        }
         _userService.Create(user);
         return RedirectToAction("List");
     }
@@ -68,6 +72,24 @@ public class UsersController : Controller
         {
             _userService.Delete(user);
         }
+        return RedirectToAction("List");
+    }
+
+    [HttpGet("edit/{id}")]
+    public ViewResult Edit(long id)
+    {
+        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        return View(user);
+    }
+
+    [HttpPost("edit/{id}")]
+    public IActionResult Edit(long id, User user)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(user);
+        }
+        _userService.Update(user);
         return RedirectToAction("List");
     }
 }

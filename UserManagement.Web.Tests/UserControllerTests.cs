@@ -3,6 +3,8 @@ using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 using UserManagement.WebMS.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace UserManagement.Data.Tests;
 
@@ -23,6 +25,80 @@ public class UserControllerTests
             .Should().BeOfType<UserListViewModel>()
             .Which.Items.Should().BeEquivalentTo(users);
     }
+    [Fact]
+    public void View_WhenAskViewOfUser_ModelShouldContainSameUser()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.View(2);
+
+        result
+            .Should().BeOfType<ViewResult>()
+            .Which.Model.Should().Be(users[1]);
+    }
+    [Fact]
+    public void Add_Get_ReturnsView()
+    {
+        var controller = CreateController();
+
+        var result = controller.Add();
+
+        result.Should().BeOfType<ViewResult>();
+    }
+    [Fact]
+    public void Add_Post_WhenValidRedirects()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.Add(users[0]);
+
+        result.Should().BeOfType<RedirectToActionResult>()
+            .Which.ActionName.Should().Be("List");
+    }
+    [Fact]
+    public void Edit_Get_ReturnsView()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.Edit(users[0].Id);
+
+        result.Should().BeOfType<ViewResult>();
+    }
+    [Fact]
+    public void Edit_Post_WhenValidRedirects()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.Edit(users[0].Id, users[0]);
+
+        result.Should().BeOfType<RedirectToActionResult>()
+            .Which.ActionName.Should().Be("List");
+    }
+    [Fact]
+    public void Delete_Get_ReturnsView()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.Delete(users[0].Id);
+
+        result.Should().BeOfType<ViewResult>();
+    }
+    [Fact]
+    public void Delete_Post_WhenValidRedirects()
+    {
+        var controller = CreateController();
+        var users = SetupUsers();
+
+        var result = controller.ConfirmDelete(users[0].Id);
+
+        result.Should().BeOfType<RedirectToActionResult>()
+            .Which.ActionName.Should().Be("List");
+    }
 
     private User[] SetupUsers()
     {
@@ -30,11 +106,22 @@ public class UserControllerTests
         {
             new User
             {
+
+                Id = 1,
                 Forename = "Johnny",
                 Surname = "User",
                 Email = "juser@example.com",
                 DateOfBirth = new DateTime(2001, 2, 5),
                 IsActive = true
+            },
+            new User
+            {
+                Id = 2,
+                Forename = "Paul",
+                Surname = "Carney",
+                Email = "pcarney@example.com",
+                DateOfBirth = new DateTime(1992, 3, 1),
+                IsActive = false
             }
         };
 

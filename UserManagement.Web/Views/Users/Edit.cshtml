@@ -1,0 +1,32 @@
+@model UserManagement.Models.User
+
+<h2>Edit User</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="mb-3">
+        <label asp-for="Forename"></label>
+        <input asp-for="Forename" required/>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Surname"></label>
+        <input asp-for="Surname" required/>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" required/>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="IsActive"></label>
+        <input asp-for="IsActive" required/>
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Edit
+    </button>
+    <a asp-action="List" class="btn btn-primary bg-danger">
+        Cancel
+    </a>
+</form>
