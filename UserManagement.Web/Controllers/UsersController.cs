@@ -32,4 +32,11 @@ public class UsersController : Controller
 
         return View(model);
     }
+
+    [HttpGet("view/{id}")]
+    public ViewResult View(long id)
+    {
+        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        return View(user);
+    }
 }
