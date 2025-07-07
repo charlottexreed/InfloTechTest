@@ -1,0 +1,32 @@
+@model UserManagement.Models.User;
+
+<h2>Add User</h2>
+
+<form asp-action="Add" method="post">
+    <div class="mb-3 flex justify-around">
+        <label asp-for="Forename"></label>
+        <input asp-for="Forename" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Surname"></label>
+        <input asp-for="Surname" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="DateOfBirth"></label>
+        <input asp-for="DateOfBirth" type="date" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="IsActive"></label>
+        <input asp-for="IsActive" />
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Add
+    </button>
+    <a asp-action="List" class="btn btn-primary bg-danger">
+        Cancel
+    </a>
+</form>

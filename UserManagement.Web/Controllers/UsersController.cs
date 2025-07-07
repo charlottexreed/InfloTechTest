@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 
@@ -38,5 +39,17 @@ public class UsersController : Controller
     {
         var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
         return View(user);
+    }
+
+    [HttpGet("add")]
+    public ViewResult Add()
+    {
+        return View();
+    }
+    [HttpPost("add")]
+    public IActionResult Add(User model)
+    {
+        _userService.Create(model);
+        return RedirectToAction("List");
     }
 }
