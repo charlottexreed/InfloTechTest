@@ -1,4 +1,5 @@
 using System.Linq;
+using System;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Implementations;
 
@@ -46,9 +47,9 @@ public class UserServiceTests
     {
         var users = new[]
         {
-            new User { Forename = "Johnny", Surname = "User", Email = "juser@example.com", IsActive = true },
-            new User { Forename = "Timmy", Surname = "Smith", Email = "tsmith@example.com", IsActive = true },
-            new User { Forename = "Sarah", Surname = "Lopez", Email = "slopez@example.com", IsActive = false }
+            new User { Forename = "Johnny", Surname = "User", Email = "juser@example.com", DateOfBirth = new DateTime(1930, 1, 1), IsActive = true },
+            new User { Forename = "Timmy", Surname = "Smith", Email = "tsmith@example.com", DateOfBirth = new DateTime(1960, 3, 22), IsActive = true },
+            new User { Forename = "Sarah", Surname = "Lopez", Email = "slopez@example.com", DateOfBirth = new DateTime(1979, 3, 12), IsActive = false }
         }.AsQueryable();
 
         _dataContext

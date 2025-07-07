@@ -1,3 +1,4 @@
+using System;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
@@ -15,7 +16,7 @@ public class UserControllerTests
         var users = SetupUsers();
 
         // Act: Invokes the method under test with the arranged parameters.
-        var result = controller.List();
+        var result = controller.List(null);
 
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Model
@@ -23,16 +24,17 @@ public class UserControllerTests
             .Which.Items.Should().BeEquivalentTo(users);
     }
 
-    private User[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
+    private User[] SetupUsers()
     {
         var users = new[]
         {
             new User
             {
-                Forename = forename,
-                Surname = surname,
-                Email = email,
-                IsActive = isActive
+                Forename = "Johnny",
+                Surname = "User",
+                Email = "juser@example.com",
+                DateOfBirth = new DateTime(2001, 2, 5),
+                IsActive = true
             }
         };
 
