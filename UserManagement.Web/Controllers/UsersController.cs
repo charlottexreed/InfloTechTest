@@ -47,9 +47,27 @@ public class UsersController : Controller
         return View();
     }
     [HttpPost("add")]
-    public IActionResult Add(User model)
+    public IActionResult Add(User user)
     {
-        _userService.Create(model);
+        _userService.Create(user);
+        return RedirectToAction("List");
+    }
+
+    [HttpGet("delete/{id}")]
+    public ViewResult Delete(long id)
+    {
+        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        return View(user);
+    }
+
+    [HttpPost("delete/{id}")]
+    public IActionResult ConfirmDelete(long id)
+    {
+        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        if (user != null)
+        {
+            _userService.Delete(user);
+        }
         return RedirectToAction("List");
     }
 }

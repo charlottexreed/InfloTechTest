@@ -1,0 +1,10 @@
+@model UserManagement.Models.User;
+
+<h2>Confirm Deleting User</h2>
+
+<p>Are you sure you want to delete: @Model.Forename @Model.Surname</p>
+
+<form asp-controller="Users" asp-action="ConfirmDelete" asp-route-id="@Model.Id" method="post">
+    <a asp-action="List" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
