@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UserManagement.Data;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserManagement.Services.Domain.Implementations;
 
@@ -17,17 +20,15 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="isActive"></param>
     /// <returns></returns>
-    public IEnumerable<User> FilterByActive(bool isActive)
+    public async Task<IEnumerable<User>> FilterByActive(bool isActive)
     {
-        return _dataAccess
-            .GetAll<User>()
-            .Where(u => u.IsActive == isActive)
-            .ToList();
+        var users = _dataAccess.GetAll<User>();
+        return await users.Where(u => u.IsActive == isActive).ToListAsync();
     }
 
-    public IEnumerable<User> GetAll() => _dataAccess.GetAll<User>();
+    public async Task<IEnumerable<User>> GetAll() => await _dataAccess.GetAll<User>().ToListAsync();
 
-    public void Create(User user) => _dataAccess.Create(user);
-    public void Delete(User user) => _dataAccess.Delete(user);
-    public void Update(User user) => _dataAccess.Update(user);
+    public async Task Create(User user) => await _dataAccess.Create(user);
+    public async Task Delete(User user) => await _dataAccess.Delete(user);
+    public async Task Update(User user) => await _dataAccess.Update(user);
 }

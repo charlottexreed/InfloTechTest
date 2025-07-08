@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
@@ -12,9 +14,9 @@ public class UsersController : Controller
     public UsersController(IUserService userService) => _userService = userService;
 
     [HttpGet]
-    public ViewResult List(bool? isActive)
+    public async Task<ViewResult> List(bool? isActive)
     {
-        var users = isActive.HasValue ? _userService.FilterByActive(isActive.Value) : _userService.GetAll();
+        var users = isActive.HasValue ? await _userService.FilterByActive(isActive.Value) : await _userService.GetAll();
 
         var items = users.Select(p => new UserListItemViewModel
         {
@@ -35,9 +37,10 @@ public class UsersController : Controller
     }
 
     [HttpGet("view/{id}")]
-    public ViewResult View(long id)
+    public async Task<ViewResult> View(long id)
     {
-        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        var users = await _userService.GetAll();
+        var user = users.FirstOrDefault(u => u.Id == id);
         return View(user);
     }
 
@@ -47,49 +50,52 @@ public class UsersController : Controller
         return View();
     }
     [HttpPost("add")]
-    public IActionResult Add(User user)
+    public async Task<IActionResult> Add(User user)
     {
         if (!ModelState.IsValid)
         {
             return View(user);
         }
-        _userService.Create(user);
+        await _userService.Create(user);
         return RedirectToAction("List");
     }
 
     [HttpGet("delete/{id}")]
-    public ViewResult Delete(long id)
+    public async Task<ViewResult> Delete(long id)
     {
-        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        var users = await _userService.GetAll();
+        var user = users.FirstOrDefault(u => u.Id == id);
         return View(user);
     }
 
     [HttpPost("delete/{id}")]
-    public IActionResult ConfirmDelete(long id)
+    public async Task<IActionResult> ConfirmDelete(long id)
     {
-        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        var users = await _userService.GetAll();
+        var user = users.FirstOrDefault(u => u.Id == id);
         if (user != null)
         {
-            _userService.Delete(user);
+            await _userService.Delete(user);
         }
         return RedirectToAction("List");
     }
 
     [HttpGet("edit/{id}")]
-    public ViewResult Edit(long id)
+    public async Task<ViewResult> Edit(long id)
     {
-        var user = _userService.GetAll().FirstOrDefault(u => u.Id == id);
+        var users = await _userService.GetAll();
+        var user = users.FirstOrDefault(u => u.Id == id);
         return View(user);
     }
 
     [HttpPost("edit/{id}")]
-    public IActionResult Edit(long id, User user)
+    public async Task<IActionResult> Edit(long id, User user)
     {
         if (!ModelState.IsValid)
         {
             return View(user);
         }
-        _userService.Update(user);
+        await _userService.Update(user);
         return RedirectToAction("List");
     }
 }
