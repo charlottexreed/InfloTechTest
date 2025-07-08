@@ -30,6 +30,7 @@ public class DataContext : DbContext, IDataContext
         });
 
     public DbSet<User>? Users { get; set; }
+    public DbSet<Log>? Logs { get; set; }
 
     public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
         => base.Set<TEntity>();

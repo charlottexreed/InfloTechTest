@@ -4,21 +4,22 @@ using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 using UserManagement.WebMS.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace UserManagement.Data.Tests;
 
 public class UserControllerTests
 {
     [Fact]
-    public void List_WhenServiceReturnsUsers_ModelMustContainUsers()
+    public async Task List_WhenServiceReturnsUsers_ModelMustContainUsers()
     {
         // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
         var controller = CreateController();
         var users = SetupUsers();
 
         // Act: Invokes the method under test with the arranged parameters.
-        var result = controller.List(null);
+        var result = await controller.List(null);
 
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Model
@@ -26,12 +27,12 @@ public class UserControllerTests
             .Which.Items.Should().BeEquivalentTo(users);
     }
     [Fact]
-    public void View_WhenAskViewOfUser_ModelShouldContainSameUser()
+    public async Task View_WhenAskViewOfUser_ModelShouldContainSameUser()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.View(2);
+        var result = await controller.View(2);
 
         result
             .Should().BeOfType<ViewResult>()
@@ -47,54 +48,54 @@ public class UserControllerTests
         result.Should().BeOfType<ViewResult>();
     }
     [Fact]
-    public void Add_Post_WhenValidRedirects()
+    public async Task Add_Post_WhenValidRedirects()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.Add(users[0]);
+        var result = await controller.Add(users[0]);
 
         result.Should().BeOfType<RedirectToActionResult>()
             .Which.ActionName.Should().Be("List");
     }
     [Fact]
-    public void Edit_Get_ReturnsView()
+    public async Task Edit_Get_ReturnsView()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.Edit(users[0].Id);
+        var result = await controller.Edit(users[0].Id);
 
         result.Should().BeOfType<ViewResult>();
     }
     [Fact]
-    public void Edit_Post_WhenValidRedirects()
+    public async Task Edit_Post_WhenValidRedirects()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.Edit(users[0].Id, users[0]);
+        var result = await controller.Edit(users[0].Id, users[0]);
 
         result.Should().BeOfType<RedirectToActionResult>()
             .Which.ActionName.Should().Be("List");
     }
     [Fact]
-    public void Delete_Get_ReturnsView()
+    public async Task Delete_Get_ReturnsView()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.Delete(users[0].Id);
+        var result = await controller.Delete(users[0].Id);
 
         result.Should().BeOfType<ViewResult>();
     }
     [Fact]
-    public void Delete_Post_WhenValidRedirects()
+    public async Task Delete_Post_WhenValidRedirects()
     {
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = controller.ConfirmDelete(users[0].Id);
+        var result = await controller.ConfirmDelete(users[0].Id);
 
         result.Should().BeOfType<RedirectToActionResult>()
             .Which.ActionName.Should().Be("List");
@@ -127,7 +128,7 @@ public class UserControllerTests
 
         _userService
             .Setup(s => s.GetAll())
-            .Returns(users);
+            .ReturnsAsync(users);
 
         return users;
     }

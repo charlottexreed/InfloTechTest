@@ -63,3 +63,6 @@ Add additional layers to the application that will ensure that it is scaleable w
 
 * Please feel free to change or refactor any code that has been supplied within the solution and think about clean maintainable code and architecture when extending the project.
 * If any additional packages, tools or setup are required to run your completed version, please document these thoroughly.
+
+## Additional Requirements
+Added 'Mockueryable.Moq' as the service tests could not properly mock the iQueryable when it used the ListAsync(). 
