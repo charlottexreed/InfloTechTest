@@ -40,8 +40,7 @@ public class UsersController : Controller
     [HttpGet("view/{id}")]
     public async Task<ViewResult> View(long id)
     {
-        var users = await _userService.GetAll();
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = await _userService.GetById(id);
         return View(user);
     }
 
@@ -64,16 +63,14 @@ public class UsersController : Controller
     [HttpGet("delete/{id}")]
     public async Task<ViewResult> Delete(long id)
     {
-        var users = await _userService.GetAll();
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = await _userService.GetById(id);
         return View(user);
     }
 
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> ConfirmDelete(long id)
     {
-        var users = await _userService.GetAll();
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = await _userService.GetById(id);
         if (user != null)
         {
             await _userService.Delete(user);
@@ -84,8 +81,7 @@ public class UsersController : Controller
     [HttpGet("edit/{id}")]
     public async Task<ViewResult> Edit(long id)
     {
-        var users = await _userService.GetAll();
-        var user = users.FirstOrDefault(u => u.Id == id);
+        var user = await _userService.GetById(id);
         return View(user);
     }
 

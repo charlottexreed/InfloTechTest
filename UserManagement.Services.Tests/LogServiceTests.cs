@@ -19,13 +19,23 @@ public class LogServiceTests
 
         result.Should().BeEquivalentTo(logs);
     }
+    [Fact]
+    public async Task GetById_ReturnsOnlySepcifiedTargetUser()
+    {
+        var service = CreateService();
+        var logs = SetupLogs();
+
+        var result = await service.FilterByUser(42);
+
+        result.Should().HaveCount(1).And.OnlyContain(l => l.TargetUserId == 42);
+    }
 
     private List<Log> SetupLogs()
     {
         var logs = new List<Log>
         {
             new Log { Id = 1, Action = "Delete", TargetUserId = 43, Details = "Deleted a@a.com", Timestamp = new DateTime(2025, 2, 1) },
-            new Log { Id = 2, Action = "Create", TargetUserId = 43, Details = "Created a@a.com", Timestamp = new DateTime(2025, 3, 1) },
+            new Log { Id = 2, Action = "Create", TargetUserId = 42, Details = "Created b@b.com", Timestamp = new DateTime(2025, 3, 1) },
             new Log { Id = 3, Action = "Edit", TargetUserId = 43, Details = "Edited a@a.com", Timestamp = new DateTime(2025, 1, 4) }
         };
         // Uses mock queryable as the ListAsync means the queryable needs to be mocked

@@ -32,6 +32,8 @@ public class UserControllerTests
         var controller = CreateController();
         var users = SetupUsers();
 
+        _userService.Setup(s => s.GetById(2)).ReturnsAsync(users[1]);
+
         var result = await controller.View(2);
 
         result

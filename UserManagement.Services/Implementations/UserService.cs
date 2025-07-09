@@ -32,6 +32,7 @@ public class UserService : IUserService
     }
 
     public async Task<IEnumerable<User>> GetAll() => await _dataAccess.GetAll<User>().ToListAsync();
+    public async Task<User?> GetById(long id) => await _dataAccess.GetAll<User>().FirstOrDefaultAsync(u => u.Id == id);
 
     public async Task Create(User user)
     {

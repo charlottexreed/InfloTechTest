@@ -17,3 +17,7 @@
     <dt>Account Active:</dt>
     <dd>@(Model.IsActive ? "Yes" : "No")</dd>
 </dl>
+
+<h2>User Logs</h2>
+
+<a class="btn btn-info" asp-controller="Logs" asp-action="List" asp-route-userId="@Model.Id">View Logs</a>

@@ -7,5 +7,6 @@ namespace UserManagement.Services.Domain.Interfaces;
 public interface ILogService
 {
     Task<IEnumerable<Log>> GetAll();
+    Task<IEnumerable<Log>> FilterByUser(long id);
     Task Create(Log entry);
 }
