@@ -15,6 +15,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>See More</th>
                 <th>Action</th>
                 <th>Target User Id</th>
                 <th>Details</th>
@@ -26,6 +27,11 @@
             @foreach (var item in Model.Items)
             {
                 <tr>
+                    <td>
+                        <a asp-controller="Logs" asp-action="GetLog" asp-route-logId="@item.Id">
+                            Click
+                        </a>
+                    </td>
                     <td>
                         @item.Action
                     </td>

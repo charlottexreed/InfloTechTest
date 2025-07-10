@@ -62,6 +62,12 @@ public class UserService : IUserService
     }
     public async Task Update(User user)
     {
+        var existingUser = await GetById(user.Id);
+        if (existingUser == null)
+        {
+            return;
+        }
+        user.Password = existingUser.Password;
         await _dataAccess.Update(user);
         await _logs.Create(new Log
         {

@@ -16,6 +16,10 @@ public class LogService : ILogService
         var logs = _dataAccess.GetAll<Log>();
         return await logs.Where(l => l.TargetUserId == userId).ToListAsync(); 
     }
+    public async Task<Log?> FilterByLogId(long logId)
+    {
+        return await _dataAccess.GetAll<Log>().FirstOrDefaultAsync(l => l.Id == logId);
+    }
     public async Task Create(Log entry)
     {
         await _dataAccess.Create(entry);

@@ -5,6 +5,7 @@ using System;
 public class LogListViewModel
 {
     public List<LogListItemViewModel> Items { get; set; } = new();
+    public LogListItemViewModel Log { get; set; } = new();
     public string? Forename { get; set; }
     public string? Surname { get; set; }
 }

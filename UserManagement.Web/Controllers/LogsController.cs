@@ -3,6 +3,7 @@ using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Logs;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 
 [Route("logs")]
 public class LogsController : Controller
@@ -45,5 +46,24 @@ public class LogsController : Controller
         }
 
         return View(model);
+    }
+    [HttpGet("log/{logId}")]
+    [ActionName("GetLog")]
+    public async Task<ViewResult> GetLog(long logId)
+    {
+        var log = await _logService.FilterByLogId(logId);
+        if (log == null)
+        {
+            throw new InvalidOperationException($"Log with ID {logId} not found");
+        }
+        var model = new LogListItemViewModel
+        {
+            Id = log.Id,
+            Action = log.Action,
+            TargetUserId = log.TargetUserId,
+            Details = log.Details,
+            Timestamp = log.Timestamp
+        };
+        return View("LogDetails", model);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -82,17 +83,44 @@ public class UsersController : Controller
     public async Task<ViewResult> Edit(long id)
     {
         var user = await _userService.GetById(id);
-        return View(user);
+        if (user == null)
+        {
+            throw new InvalidOperationException($"User with ID {id} not found");
+        }
+        var model = new EditUserViewModel
+        {
+            Id = user.Id,
+            Forename = user.Forename,
+            Surname = user.Surname,
+            Email = user.Email,
+            DateOfBirth = user.DateOfBirth,
+            IsActive = user.IsActive
+        };
+        return View(model);
     }
 
     [HttpPost("edit/{id}")]
-    public async Task<IActionResult> Edit(long id, User user)
+    public async Task<IActionResult> Edit(long id, EditUserViewModel model)
     {
+        Console.WriteLine($"Edit POST called for ID: {id}");
         if (!ModelState.IsValid)
         {
-            return View(user);
+            return View(model);
         }
+        var user = await _userService.GetById(id);
+        if (user == null)
+        {
+            throw new InvalidOperationException($"User with ID {id} not found");
+        }
+
+        user.Forename = model.Forename;
+        user.Surname = model.Surname;
+        user.Email = model.Email;
+        user.DateOfBirth = model.DateOfBirth;
+        user.IsActive = model.IsActive;
+
         await _userService.Update(user);
+
         return RedirectToAction("List");
     }
 }
