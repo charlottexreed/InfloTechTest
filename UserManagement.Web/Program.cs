@@ -11,6 +11,10 @@ builder.Services
     .AddMarkdown()
     .AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 app.UseMarkdown();
@@ -21,6 +25,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapDefaultControllerRoute();
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
@@ -18,4 +19,5 @@ public interface IUserService
     Task Create(User user);
     Task Delete(User user);
     Task Update(User user);
+    Task<User?> ValidateUser(string email, string password);
 }

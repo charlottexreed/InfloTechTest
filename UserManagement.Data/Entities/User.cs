@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Dynamic;
 
 namespace UserManagement.Models;
-
 public class User
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,6 +17,7 @@ public class User
     [Display(Name = "Email")]
     [EmailAddress]
     public string Email { get; set; } = default!;
+    public string Password { get; set; } = default!;
     [Display(Name = "Date of Birth")]
     [DataType(DataType.Date)]
     public DateTime DateOfBirth { get; set; }

@@ -1,0 +1,19 @@
+@model UserManagement.Web.Models.Auth.AuthViewModel;
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" required/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" required />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Add
+    </button>
+</form>

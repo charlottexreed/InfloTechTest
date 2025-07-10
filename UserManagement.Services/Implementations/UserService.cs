@@ -67,4 +67,21 @@ public class UserService : IUserService
             Details = $"Edited {user.Email}"
         });
     }
+    public async Task<User?> ValidateUser(string email, string password)
+    {
+        var user = await _dataAccess.GetAll<User>().FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        if (user.Password == password)
+        {
+            return user;
+        }
+
+        return null;;
+
+    }
 }
