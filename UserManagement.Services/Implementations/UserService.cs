@@ -7,6 +7,7 @@ using UserManagement.Data;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace UserManagement.Services.Domain.Implementations;
 
@@ -36,6 +37,9 @@ public class UserService : IUserService
 
     public async Task Create(User user)
     {
+        var hasher = new PasswordHasher<User>();
+        user.Password = hasher.HashPassword(user, user.Password);
+
         await _dataAccess.Create(user);
         await _logs.Create(new Log
         {
@@ -76,7 +80,10 @@ public class UserService : IUserService
             return null;
         }
 
-        if (user.Password == password)
+        var hasher = new PasswordHasher<User>();
+        var verification = new PasswordHasher<User>().VerifyHashedPassword(user, user.Password, password);
+
+        if (verification == PasswordVerificationResult.Success)
         {
             return user;
         }

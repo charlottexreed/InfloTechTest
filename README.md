@@ -65,4 +65,9 @@ Add additional layers to the application that will ensure that it is scaleable w
 * If any additional packages, tools or setup are required to run your completed version, please document these thoroughly.
 
 ## Additional Requirements
-Added 'Mockueryable.Moq' as the service tests could not properly mock the iQueryable when it used the ListAsync(). 
+Added 'Mockueryable.Moq' as the service tests could not properly mock the iQueryable when it used the ListAsync().
+Added 'Microsoft.AspNetCore.Identity' for password hashing
+
+## Extra notes
+- The tests could do with more mocking of things like the session data but did not have time to research how
+- The authentication is basic and if there were more time would use jwt tokens and make the login details control different actions such as the ability to edit a user
