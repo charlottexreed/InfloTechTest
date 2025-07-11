@@ -24,7 +24,7 @@ public class UserControllerTests
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Model
             .Should().BeOfType<UserListViewModel>()
-            .Which.Items.Should().BeEquivalentTo(users);
+            .Which.Items.Should().BeEquivalentTo(users, options => options.Excluding(u => u.Password));
     }
     [Fact]
     public async Task View_WhenAskViewOfUser_ModelShouldContainSameUser()
@@ -76,7 +76,18 @@ public class UserControllerTests
         var controller = CreateController();
         var users = SetupUsers();
 
-        var result = await controller.Edit(users[0].Id, users[0]);
+        var model = new EditUserViewModel
+        {
+            Id = users[0].Id,
+            Forename = users[0].Forename,
+            Surname = users[0].Surname,
+            Email = users[0].Email,
+            DateOfBirth = users[0].DateOfBirth,
+            IsActive = users[0].IsActive
+        };
+
+
+        var result = await controller.Edit(users[0].Id, model);
 
         result.Should().BeOfType<RedirectToActionResult>()
             .Which.ActionName.Should().Be("List");
@@ -131,6 +142,21 @@ public class UserControllerTests
         _userService
             .Setup(s => s.GetAll())
             .ReturnsAsync(users);
+
+        foreach (var user in users)
+        {
+        _userService
+            .Setup(s => s.GetById(user.Id))
+            .ReturnsAsync(user);
+
+        _userService
+            .Setup(s => s.Update(It.Is<User>(u => u.Id == user.Id)))
+            .Returns(Task.CompletedTask);
+
+        _userService
+            .Setup(s => s.Delete(It.Is<User>(u => u.Id == user.Id)))
+            .Returns(Task.CompletedTask);
+        }
 
         return users;
     }

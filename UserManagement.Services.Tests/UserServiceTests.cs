@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MockQueryable;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
+using Microsoft.AspNetCore.Identity;
 
 namespace UserManagement.Data.Tests;
 
@@ -53,10 +54,12 @@ public class UserServiceTests
         var service = CreateService();
         var users = SetupUsers();
         var user = users.First();
+        var firstPasswordNoHash = "1234";
 
-        var result = await service.ValidateUser(user.Email, user.Password);
+        var result = await service.ValidateUser(user.Email, firstPasswordNoHash);
 
-        result.Should().BeEquivalentTo(user);
+        result.Should().NotBeNull();
+        result!.Email.Should().Be(user.Email);
     }
     [Fact]
     public async Task ValidateUser_WithIncorrectPassword_ReturnsNull()
@@ -82,12 +85,17 @@ public class UserServiceTests
     }
     private List<User> SetupUsers()
     {
+        var hasher = new PasswordHasher<User>();
         var users = new List<User>
         {
-            new User { Forename = "Johnny", Surname = "User", Email = "juser@example.com", Password = "1234", DateOfBirth = new DateTime(1930, 1, 1), IsActive = true },
-            new User { Forename = "Timmy", Surname = "Smith", Email = "tsmith@example.com", Password = "2345", DateOfBirth = new DateTime(1960, 3, 22), IsActive = true },
-            new User { Forename = "Sarah", Surname = "Lopez", Email = "slopez@example.com", Password = "3456", DateOfBirth = new DateTime(1979, 3, 12), IsActive = false }
+            new User { Forename = "Johnny", Surname = "User", Email = "juser@example.com", DateOfBirth = new DateTime(1930, 1, 1), IsActive = true },
+            new User { Forename = "Timmy", Surname = "Smith", Email = "tsmith@example.com", DateOfBirth = new DateTime(1960, 3, 22), IsActive = true },
+            new User { Forename = "Sarah", Surname = "Lopez", Email = "slopez@example.com", DateOfBirth = new DateTime(1979, 3, 12), IsActive = false }
         };
+        users[0].Password = hasher.HashPassword(users[0], "1234");
+        users[1].Password = hasher.HashPassword(users[1], "2345");
+        users[2].Password = hasher.HashPassword(users[2], "3456");
+
         // Uses mock queryable as the ListAsync means the queryable needs to be mocked
         var mockQueryable = users.AsQueryable().BuildMock();
 

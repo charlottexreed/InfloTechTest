@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -17,7 +18,10 @@ public class DataContextTests
         {
             Forename = "Brand New",
             Surname = "User",
-            Email = "brandnewuser@example.com"
+            Email = "brandnewuser@example.com",
+            Password = "1234",
+            DateOfBirth = new DateTime(2004, 1, 1),
+            IsActive = true
         };
         await context.Create(entity);
 
